@@ -734,6 +734,26 @@ a.contact-row:hover .contact-value { color: var(--teal); }
 }
 [data-orientation="portrait"] .carousel-slide { aspect-ratio: 9 / 16; }
 .carousel-slide video, .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; background: var(--bg); }
+.carousel-slide video { cursor: pointer; }
+
+.sound-toggle {
+  position: absolute;
+  bottom: 16px; right: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(11, 13, 15, 0.6);
+  border: 1px solid rgba(245, 243, 239, 0.35);
+  color: var(--dark-ink);
+  cursor: pointer;
+  z-index: 3;
+  transition: background-color 0.18s ease;
+}
+.sound-toggle:hover { background: rgba(11, 13, 15, 0.85); }
+.sound-toggle .icon-unmuted { display: none; }
+.sound-toggle.is-unmuted .icon-muted { display: none; }
+.sound-toggle.is-unmuted .icon-unmuted { display: block; }
+.sound-toggle.is-unmuted { border-color: var(--teal-bright); color: var(--teal-bright); }
 .carousel-btn {
   position: absolute;
   top: 50%;

@@ -31,6 +31,10 @@
           (m) =>
             `<div class="carousel-slide">
                <video data-src="${m.src}" poster="${m.poster}" muted loop playsinline preload="none" aria-label="${m.alt || stripTags(project.title)}"></video>
+               <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Ton einschalten">
+                 <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="m16 9 6 6m0-6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                 <svg class="icon-unmuted" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.2 6a9 9 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+               </button>
              </div>`
         )
         .join("")
@@ -96,6 +100,31 @@
       </div>
     </div>
   `;
+
+  // Detail-page videos start muted; a click on the video (or the sound
+  // icon) toggles audio on/off. Cards on the main page are untouched.
+  container.querySelectorAll(".carousel-slide").forEach((slide) => {
+    const video = slide.querySelector("video");
+    const toggle = slide.querySelector(".sound-toggle");
+    if (!video || !toggle) return;
+
+    const updateIcon = () => {
+      toggle.classList.toggle("is-unmuted", !video.muted);
+      toggle.setAttribute("aria-pressed", String(!video.muted));
+      toggle.setAttribute("aria-label", video.muted ? "Ton einschalten" : "Ton ausschalten");
+    };
+
+    const toggleSound = (event) => {
+      event.stopPropagation();
+      video.muted = !video.muted;
+      updateIcon();
+    };
+
+    toggle.addEventListener("click", toggleSound);
+    video.addEventListener("click", toggleSound);
+    video.addEventListener("volumechange", updateIcon);
+    updateIcon();
+  });
 
   function stripTags(html) {
     const div = document.createElement("div");
